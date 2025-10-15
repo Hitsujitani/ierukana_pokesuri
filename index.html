@@ -259,20 +259,15 @@
     renderList();
 
     function checkPokemon(){
-      if(inputElem.disabled) return;
-      const input = inputElem.value.trim(); if(!input) return;
-      const katakanaInput = toKatakana(input);
-      const cells = list.querySelectorAll('.cell');
-      for(let i=0;i<pokemonTableRaw.length;i++){
-        const katakanaAnswer = toKatakana(pokemonTableRaw[i]);
-        if(!correctFlags[i] && katakanaInput === katakanaAnswer){
-          correctFlags[i] = true;
-          cells[i].textContent = pokemonNumbers[i] + '. ' + pokemonTableRaw[i];
-          cells[i].scrollIntoView({ behavior:'smooth', block:'center' });
-          solvedCount++; updateProgress();
-          break;
-        }
-      }
+        if(inputElem.disabled) return;
+        const input = inputElem.value.trim(); if(!input) return;
+      // ひらがな→カタカナ変換関数（確実にすべてのひらがなを変換）
+    function toKatakana(str) {
+      return str.replace(/[ぁ-ん]/g, ch =>
+        String.fromCharCode(ch.charCodeAt(0) + 0x60)
+      );
+    }
+
       if(solvedCount === totalCount){ stopTimer(); overlay.style.display='flex'; }
       inputElem.value=''; inputElem.focus();
     }
