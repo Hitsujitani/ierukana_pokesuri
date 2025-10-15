@@ -34,6 +34,20 @@
     .modal h2 { margin-top: 0; }
     .modal .actions { text-align: right; margin-top: 16px; display: flex; gap: 8px; justify-content: flex-end; }
     .modal button { font-size: 14px; padding: 6px 12px; }
+    html, body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  /* 画像パスは配置場所に合わせて変更 */
+  background-image: url("./greenglass.jpg");
+  background-size: cover;       /* 画面いっぱいに拡大縮小 */
+  background-position: center;  /* 中央寄せ */
+  background-repeat: no-repeat; /* 繰り返しなし */
+  /* 必要なら固定表示 → モバイルでの描画が重い場合は外してください */
+  /* background-attachment: fixed; */
+  background-color: #8fdc6b;    /* 読み込み前の下地色（任意） */
+}
   </style>
 </head>
 <body>
