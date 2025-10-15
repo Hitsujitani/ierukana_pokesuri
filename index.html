@@ -224,14 +224,16 @@
       const s = String(t%60).padStart(2,"0");
       return `${h}:${m}:${s}`;
     }
-    function startTimer(){
-      if(running) return;
-      startTime = Date.now();
-      timerId = setInterval(()=>{ timerElem.textContent = formatTime(Date.now()-startTime); }, 200);
-      running = true;
-      // 入力・回答を有効化
-      inputElem.disabled = false; answerBtn.disabled = false; inputElem.focus();
+  function startTimer(){
+    if(running) return;
+    startTime = Date.now();
+    timerId = setInterval(()=>{ timerElem.textContent = formatTime(Date.now()-startTime); }, 200);
+    running = true;            // ← JSの真偽値は小文字
+    inputElem.disabled = false;
+    answerBtn.disabled = false;
+    inputElem.focus();
     }
+
     function stopTimer(){
       if(!running) return;
       clearInterval(timerId); timerId=null; running=false;
