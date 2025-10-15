@@ -1,58 +1,136 @@
-from bs4 import BeautifulSoup
+# 多数のポケモンを登録するため、番号と名前を対応づけた配列を構築し、HTMLに反映
 
-# index.htmlの読み込みパスと書き込みパス
-index_path = os.path.join(extract_path, "TeaHouse-1.0.0", "index.html")
-output_path = "/mnt/data/index_pokesuri.html"
+pokemon_data = [
+    (1, "フシギダネ"), (2, "フシギソウ"), (3, "フシギバナ"),
+    (4, "ヒトカゲ"), (5, "リザード"), (6, "リザードン"),
+    (7, "ゼニガメ"), (8, "カメール"), (9, "カメックス"),
+    (10, "キャタピー"), (11, "トランセル"), (12, "バタフリー"),
+    (19, "コラッタ"), (20, "ラッタ"), (23, "アーボ"), (24, "アーボック"),
+    (25, "ピカチュウ"), (25.1, "ピカチュウ（ハロウィン）"),
+    (25.2, "ピカチュウ（ホリデー）"), (26, "ライチュウ"),
+    (35, "ピッピ"), (36, "ピクシー"), (37, "ロコン"), (37.1, "ロコン（アローラ）"),
+    (38, "キュウコン"), (38.1, "キュウコン（アローラ）"),
+    (39, "プリン"), (40, "プクリン"), (50, "ディグダ"), (51, "ダグトリオ"),
+    (52, "ニャース"), (53, "ペルシアン"), (54, "コダック"), (55, "ゴルダック"),
+    (56, "マンキー"), (57, "オコリザル"), (58, "ガーディ"), (59, "ウインディ"),
+    (69, "マダツボミ"), (70, "ウツドン"), (71, "ウツボット"),
+    (74, "イシツブテ"), (75, "ゴローン"), (76, "ゴローニャ"),
+    (79, "ヤドン"), (80, "ヤドラン"), (81, "コイル"), (82, "レアコイル"),
+    (83, "カモネギ"), (84, "ドードー"), (85, "ドードリオ"),
+    (92, "ゴース"), (93, "ゴースト"), (94, "ゲンガー"),
+    (95, "イワーク"), (104, "カラカラ"), (105, "ガラガラ"),
+    (113, "ラッキー"), (115, "ガルーラ"), (122, "バリヤード"),
+    (127, "カイロス"), (132, "メタモン"), (133, "イーブイ"),
+    (133.1, "イーブイ（ホリデー）"), (134, "シャワーズ"),
+    (135, "サンダース"), (136, "ブースター"),
+    (147, "ミニリュウ"), (148, "ハクリュー"), (149, "カイリュー"),
+    (152, "チコリータ"), (153, "ベイリーフ"), (154, "メガニウム"),
+    (155, "ヒノアラシ"), (156, "マグマラシ"), (157, "バクフーン"),
+    (158, "ワニノコ"), (159, "アリゲイツ"), (160, "オーダイル"),
+    (172, "ピチュー"), (173, "ピィ"), (174, "ププリン"), (175, "トゲピー"),
+    (176, "トゲチック"), (177, "ネイティ"), (178, "ネイティオ"),
+    (179, "メリープ"), (180, "モココ"), (181, "デンリュウ"),
+    (185, "ウソッキー"), (194, "ウパー"), (194.1, "ウパー（パルデア）"),
+    (195, "ヌオー"), (196, "エーフィ"), (197, "ブラッキー"),
+    (198, "ヤミカラス"), (199, "ヤドキング"), (202, "ソーナンス"),
+    (208, "ハガネール"), (214, "ヘラクロス"), (215, "ニューラ"),
+    (225, "デリバード"), (228, "デルビル"), (229, "ヘルガー"),
+    (242, "ハピナス"), (243, "ライコウ"), (244, "エンテイ"),
+    (245, "スイクン"), (246, "ヨーギラス"), (247, "サナギラス"), (248, "バンギラス"),
+    (252, "キモリ"), (253, "ジュプトル"), (254, "ジュカイン"),
+    (255, "アチャモ"), (256, "ワカシャモ"), (257, "バシャーモ"),
+    (258, "ミズゴロウ"), (259, "ヌマクロー"), (260, "ラグラージ"),
+    (280, "ラルトス"), (281, "キルリア"), (282, "サーナイト"),
+    (287, "ナマケロ"), (288, "ヤルキモノ"), (289, "ケッキング"),
+    (302, "ヤミラミ"), (303, "クチート"), (304, "ココドラ"),
+    (305, "コドラ"), (306, "ボスゴドラ"),
+    (311, "プラスル"), (312, "マイナン"),
+    (316, "ゴクリン"), (317, "マルノーム"),
+    (333, "チルット"), (334, "チルタリス"),
+    (353, "カゲボウズ"), (354, "ジュペッタ"),
+    (359, "アブソル"), (360, "ソーナノ"),
+    (363, "タマザラシ"), (364, "トドグラー"), (365, "トドゼルガ"),
+    (403, "コリンク"), (404, "ルクシオ"), (405, "レントラー"),
+    (425, "フワンテ"), (426, "フワライド"), (430, "ドンカラス"),
+    (438, "ウソハチ"), (439, "マネネ"), (440, "ピンプク"),
+    (447, "リオル"), (448, "ルカリオ"), (453, "グレッグル"), (454, "ドクロッグ"),
+    (459, "ユキカブリ"), (460, "ユキノオー"), (461, "マニューラ"),
+    (462, "ジバコイル"), (468, "トゲキッス"), (470, "リーフィア"),
+    (471, "グレイシア"), (475, "エルレイド"),
+    (488, "クレセリア"), (491, "ダークライ"),
+    (517, "ムンナ"), (518, "ムシャーナ"),
+    (627, "ワシボン"), (628, "ウォーグル"),
+    (700, "ニンフィア"), (702, "デデンネ"),
+    (736, "アゴジムシ"), (737, "デンヂムシ"), (738, "クワガノン"),
+    (759, "ヌイコグマ"), (760, "キテルグマ"),
+    (764, "キュワワー"), (778, "ミミッキュ"),
+    (845, "ウッウ"), (848, "エレズン"),
+    (849, "ストリンダー（ハイ）"), (849.1, "ストリンダー（ロー）"),
+    (906, "ニャオハ"), (907, "ニャローテ"), (908, "マスカーニャ"),
+    (909, "ホゲータ"), (910, "アチゲータ"), (911, "ラウドボーン"),
+    (912, "クワッス"), (913, "ウェルカモ"), (914, "ウェーニバル"),
+    (921, "パモ"), (922, "パモット"), (923, "パーモット"),
+    (980, "ドオー")
+]
 
-# HTMLを読み込んで、編集する
-with open(index_path, "r", encoding="utf-8") as file:
-    soup = BeautifulSoup(file, "html.parser")
+# HTMLを生成
+output_html_path = "/mnt/data/index_pokesuri_full.html"
 
-# メインコンテンツの場所に新しいセクションを追加（既存内容に影響しないように下部に追加）
-game_div = soup.new_tag("div", attrs={"id": "ierukana-game", "style": "padding: 50px;"})
-game_div.append(BeautifulSoup("""
-<h2>ポケスリいえるかな？</h2>
-<p>ポケモンの名前を入力してください（例: フシギダネ）</p>
-<input type="text" id="pokemonInput" placeholder="ポケモンの名前" style="padding: 5px; font-size: 16px;">
-<button onclick="checkPokemon()" style="padding: 5px 10px; font-size: 16px;">送信</button>
+html_content = """<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>ポケスリいえるかな？</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; }
+    input { font-size: 16px; padding: 5px; }
+    button { font-size: 16px; padding: 5px 10px; }
+    ul { margin-top: 20px; list-style: none; padding: 0; }
+    li { margin-bottom: 4px; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>ポケスリいえるかな？</h1>
+  <p>ポケモンの名前を入力してください。</p>
+  <input type="text" id="pokemonInput" placeholder="ポケモンの名前を入力">
+  <button onclick="checkPokemon()">送信</button>
 
-<ul id="pokemonList" style="margin-top: 20px; font-weight: bold;">
-  <li>1. ???</li>
-  <li>2. ???</li>
-  <li>3. ???</li>
-</ul>
+  <ul id="pokemonList">
+"""
 
-<script>
-  const pokemonTable = ["フシギダネ", "フシギソウ", "フシギバナ"];
-  let correctFlags = [false, false, false];
+for num, name in pokemon_data:
+    html_content += f'    <li>{int(num) if num % 1 == 0 else num}. ???</li>\n'
 
-  function checkPokemon() {
-    const input = document.getElementById("pokemonInput").value.trim();
-    const listItems = document.querySelectorAll("#pokemonList li");
-    let found = false;
-    for (let i = 0; i < pokemonTable.length; i++) {
-      if (!correctFlags[i] && input === pokemonTable[i]) {
-        correctFlags[i] = true;
-        listItems[i].textContent = (i + 1) + ". " + pokemonTable[i];
-        found = true;
-        break;
+html_content += """  </ul>
+
+  <script>
+    const pokemonTable = %s;
+    const pokemonNumbers = %s;
+    let correctFlags = Array(pokemonTable.length).fill(false);
+
+    function checkPokemon() {
+      const input = document.getElementById("pokemonInput").value.trim();
+      const listItems = document.querySelectorAll("#pokemonList li");
+      let found = false;
+      for (let i = 0; i < pokemonTable.length; i++) {
+        if (!correctFlags[i] && input === pokemonTable[i]) {
+          correctFlags[i] = true;
+          listItems[i].textContent = pokemonNumbers[i] + ". " + pokemonTable[i];
+          found = true;
+          break;
+        }
       }
+      if (!found) alert("不正解です！");
+      document.getElementById("pokemonInput").value = "";
+      document.getElementById("pokemonInput").focus();
     }
-    if (!found) {
-      alert("不正解です！");
-    }
-    document.getElementById("pokemonInput").value = "";
-    document.getElementById("pokemonInput").focus();
-  }
-</script>
-""", "html.parser"))
+  </script>
+</body>
+</html>
+""" % ([name for _, name in pokemon_data], [int(num) if num % 1 == 0 else num for num, _ in pokemon_data])
 
-# body タグの末尾に game_div を追加
-if soup.body:
-    soup.body.append(game_div)
+# 保存
+with open(output_html_path, "w", encoding="utf-8") as f:
+    f.write(html_content)
 
-# 編集後のHTMLを保存
-with open(output_path, "w", encoding="utf-8") as file:
-    file.write(str(soup))
-
-output_path
+output_html_path
