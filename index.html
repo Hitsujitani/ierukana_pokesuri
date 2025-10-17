@@ -330,18 +330,19 @@
     startBtn.addEventListener("click", startTimer);
 
     /* ====== 共有 ====== */
-    shareBtnMain.addEventListener("click", ()=>{
-      const text = `「ポケスリ全部いえるかな」ゲームに挑戦しました！${totalCount}匹中${solvedCount}覚えていたよ！経過時間は:${timerElem.textContent}でした。 https://hitsujitani.github.io/ierukana_pokesuri/`;
-      const url = "https://x.com/intent/tweet?text=" + encodeURIComponent(text);
-      window.open(url, "_blank");
-    });
+shareBtnMain.addEventListener("click", ()=>{
+  const text = `${timerElem.textContent}で${totalCount}匹中${solvedCount}覚えていたよ！ - #ポケスリ全部いえるかな https://hitsujitani.github.io/ierukana_pokesuri/`;
+  const url = "https://x.com/intent/tweet?text=" + encodeURIComponent(text);
+  window.open(url, "_blank");
+});
 
-    /* ====== 完了モーダル ====== */
-    completeShareBtn.addEventListener("click", ()=>{
-      const text = `「ポケスリ全部いえるかな」ゲームに挑戦しました！お見事！全問正解です！！達成時間は${timerElem.textContent}でした。 https://hitsujitani.github.io/ierukana_pokesuri/`;
-      const url = "https://x.com/intent/tweet?text=" + encodeURIComponent(text);
-      window.open(url, "_blank");
-    });
+/* ====== 完了モーダル ====== */
+completeShareBtn.addEventListener("click", ()=>{
+  const text = `${timerElem.textContent}で${totalCount}匹中全問正解しました！お見事！！ - #ポケスリ全部いえるかな https://hitsujitani.github.io/ierukana_pokesuri/`;
+  const url = "https://x.com/intent/tweet?text=" + encodeURIComponent(text);
+  window.open(url, "_blank");
+});
+
     completeOk.addEventListener("click", ()=>{ overlay.style.display="none"; });
   </script>
 </body>
