@@ -105,24 +105,18 @@
     <div class="grid" id="pokemonList"></div>
   </div>
 
-  <div class="footer">
-    <div>Ver. 2.12.2</div>
-    <div>X：羊谷ランプ@fuck_capslock（<a href="https://x.com/fuck_capslock" target="_blank" rel="noopener noreferrer">https://x.com/fuck_capslock</a>）</div>
-    <div>Inspired by ポケモン全部言えるかな？ゲーム</div>
-    <div id="visitCounter" style="margin-top:6px;">Loading...</div>
-<script>
-  fetch("https://api.counterapi.dev/v1/hitsujitani_pokesuri/visit")
-    .then(res => res.json())
-    .then(data => {
-      document.getElementById("visitCounter").textContent =
-        `Total Access Count：${data.count} `;
-    })
-    .catch(err => {
-      document.getElementById("visitCounter").textContent =
-        "アクセス数を取得できませんでした";
-    });
-</script>
-
+ <div class="footer">
+  <div>Ver. 3.0.0</div>
+  <div>
+    作成者：羊谷ランプ 
+    <a href="https://x.com/fuck_capslock" target="_blank" rel="noopener noreferrer">
+      @fuck_capslock
+    </a>
+  </div>
+  <div>Inspired by ポケモン全部言えるかな？ゲーム</div>
+  <div id="visitCounter" style="margin-top:6px;">Loading...</div>
+</div>
+  
   </div>
 
   <!-- 全問正解モーダル -->
