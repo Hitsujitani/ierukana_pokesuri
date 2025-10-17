@@ -122,7 +122,7 @@
   <!-- 全問正解モーダル -->
   <div id="completeOverlay" class="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="completeTitle">
     <div class="modal">
-      <h2 id="completeTitle">全問正解！あなたは立派な廃人プレイヤーです！！</h2>
+      <h2 id="completeTitle">全問正解おめでとう！あなたは立派な廃人プレイヤーです！こんなゲームやってないで、さっさと寝ましょう！</h2>
       <div class="actions">
         <button id="completeShareBtn" class="btn-share">結果をXで共有</button>
         <button id="completeOk" class="btn-start">OK</button>
@@ -332,14 +332,14 @@
 
     /* ====== 共有 ====== */
 shareBtnMain.addEventListener("click", ()=>{
-  const text = `ポケモンスリープ 何も見ずに全匹いえるかな？ あなたは${timerElem.textContent}で${totalCount}匹中${solvedCount}覚えていたよ！ - #ポケスリ全部いえるかな https://hitsujitani.github.io/ierukana_pokesuri/`;
+  const text = `ポケモンスリープ なにも見ずに全匹いえるかな？ あなたは${timerElem.textContent}で${totalCount}匹中${solvedCount}覚えていたよ！ - #ポケスリ全部いえるかな https://hitsujitani.github.io/ierukana_pokesuri/`;
   const url = "https://x.com/intent/tweet?text=" + encodeURIComponent(text);
   window.open(url, "_blank");
 });
 
 /* ====== 完了モーダル ====== */
 completeShareBtn.addEventListener("click", ()=>{
-  const text = `ポケモンスリープ 何も見ずに全匹いえるかな？ あなたは${timerElem.textContent}で${totalCount}匹中全問正解しました！クリアおめでとう！ - #ポケスリ全部いえるかな https://hitsujitani.github.io/ierukana_pokesuri/`;
+  const text = `ポケモンスリープ なにも見ずに全匹いえるかな？ あなたは${timerElem.textContent}で${totalCount}匹中全問正解しました！クリアおめでとう！遊んでないで早く寝よう！ - #ポケスリ全部いえるかな https://hitsujitani.github.io/ierukana_pokesuri/`;
   const url = "https://x.com/intent/tweet?text=" + encodeURIComponent(text);
   window.open(url, "_blank");
 });
